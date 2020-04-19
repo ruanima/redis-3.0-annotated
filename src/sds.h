@@ -45,10 +45,10 @@
 typedef char *sds;
 
 /*
- * 保存字符串对象的结构
+ * 保存字符串对象的结构, 柔性数组
  */
 struct sdshdr {
-    
+
     // buf 中已占用空间的长度
     int len;
 

@@ -62,11 +62,11 @@
  * 哈希表节点
  */
 typedef struct dictEntry {
-    
+
     // 键
     void *key;
 
-    // 值
+    // 值, 联合值, 可以是整数或者指针
     union {
         void *val;
         uint64_t u64;
@@ -98,7 +98,7 @@ typedef struct dictType {
 
     // 销毁键的函数
     void (*keyDestructor)(void *privdata, void *key);
-    
+
     // 销毁值的函数
     void (*valDestructor)(void *privdata, void *obj);
 
@@ -113,13 +113,13 @@ typedef struct dictType {
  * 每个字典都使用两个哈希表，从而实现渐进式 rehash 。
  */
 typedef struct dictht {
-    
+
     // 哈希表数组
     dictEntry **table;
 
     // 哈希表大小
     unsigned long size;
-    
+
     // 哈希表大小掩码，用于计算索引值
     // 总是等于 size - 1
     unsigned long sizemask;
@@ -166,7 +166,7 @@ typedef struct dict {
  * 而不对字典进行修改。
  */
 typedef struct dictIterator {
-        
+
     // 被迭代的字典
     dict *d;
 
