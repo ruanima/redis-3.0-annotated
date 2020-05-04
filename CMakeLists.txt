@@ -29,7 +29,12 @@ add_subdirectory(deps)
 
 set(SRC_SERVER
         src/adlist.c src/ae.c src/anet.c src/dict.c src/redis.c src/sds.c src/zmalloc.c
-        src/lzf_c.c src/lzf_d.c src/pqsort.c src/zipmap.c src/sha1.c src/ziplist.c src/release.c src/networking.c src/util.c src/object.c src/db.c src/replication.c src/rdb.c src/t_string.c src/t_list.c src/t_set.c src/t_zset.c src/t_hash.c src/config.c src/aof.c src/pubsub.c src/multi.c src/debug.c src/sort.c src/intset.c src/syncio.c src/cluster.c src/crc16.c src/endianconv.c src/slowlog.c src/scripting.c src/bio.c src/rio.c src/rand.c src/memtest.c src/crc64.c src/bitops.c src/sentinel.c src/notify.c src/setproctitle.c src/blocked.c src/hyperloglog.c
+        src/lzf_c.c src/lzf_d.c src/pqsort.c src/zipmap.c src/sha1.c src/ziplist.c src/release.c
+        src/networking.c src/util.c src/object.c src/db.c src/replication.c src/rdb.c src/t_string.c
+        src/t_list.c src/t_set.c src/t_zset.c src/t_hash.c src/config.c src/aof.c src/pubsub.c src/multi.c
+        src/debug.c src/sort.c src/intset.c src/syncio.c src/cluster.c src/crc16.c src/endianconv.c src/slowlog.c
+        src/scripting.c src/bio.c src/rio.c src/rand.c src/memtest.c src/crc64.c src/bitops.c src/sentinel.c
+        src/notify.c src/setproctitle.c src/blocked.c src/hyperloglog.c
         )
 
 set(SRC_CLI
@@ -52,7 +57,6 @@ set_property(TARGET redis-cli PROPERTY C_STANDARD 99)
 set_property(TARGET redis-cli PROPERTY CXX_STANDARD 11)
 set_property(TARGET redis-cli PROPERTY CXX_STANDARD_REQUIRED ON)
 
-
 target_include_directories(redis-server
         PRIVATE ${REDIS_ROOT}/deps/hiredis
         PRIVATE ${REDIS_ROOT}/deps/linenoise
@@ -66,7 +70,6 @@ target_include_directories(redis-cli
         # PRIVATE ${REDIS_ROOT}/deps/jemalloc
         PRIVATE ${REDIS_ROOT}/deps/lua/src
         )
-
 
 target_link_libraries(redis-server
         PRIVATE pthread
@@ -83,4 +86,31 @@ target_link_libraries(redis-cli
         PRIVATE hiredis
         )
 
+set(SRC_LEARN
+        src/learn_redis.c
+        src/adlist.c src/dict.c src/sds.c src/zmalloc.c
+)
+
+add_executable(learn ${SRC_LEARN})
+
+set_property(TARGET learn PROPERTY C_STANDARD 99)
+set_property(TARGET learn PROPERTY CXX_STANDARD 11)
+set_property(TARGET learn PROPERTY CXX_STANDARD_REQUIRED ON)
+
+target_include_directories(learn
+        PRIVATE ${REDIS_ROOT}/deps/hiredis
+        PRIVATE ${REDIS_ROOT}/deps/linenoise
+        # PRIVATE ${REDIS_ROOT}/deps/jemalloc
+        PRIVATE ${REDIS_ROOT}/deps/lua/src
+        )
+
+target_link_libraries(learn
+        PRIVATE pthread
+        PRIVATE m
+        PRIVATE lua
+        PRIVATE linenoise
+        PRIVATE hiredis
+        )
+
 link_directories(deps/hiredis/ deps/linenoise/ diredeps/lua/src)
+target_compile_definitions(learn PRIVATE DICT_BENCHMARK_MAIN=1)
