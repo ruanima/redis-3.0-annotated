@@ -733,7 +733,7 @@ typedef struct zskiplistNode {
         // 跨度
         unsigned int span;
 
-    } level[];
+    } level[];  // 又是柔性数组
 
 } zskiplistNode;
 
