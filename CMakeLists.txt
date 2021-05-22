@@ -86,9 +86,12 @@ target_link_libraries(redis-cli
         PRIVATE hiredis
         )
 
+
+# add for learning
 set(SRC_LEARN
         src/learn_redis.c
         src/adlist.c src/dict.c src/sds.c src/zmalloc.c
+        src/ziplist.c src/util.c
 )
 
 add_executable(learn ${SRC_LEARN})
@@ -114,3 +117,4 @@ target_link_libraries(learn
 
 link_directories(deps/hiredis/ deps/linenoise/ diredeps/lua/src)
 target_compile_definitions(learn PRIVATE DICT_BENCHMARK_MAIN=1)
+# end learning

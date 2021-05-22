@@ -246,6 +246,7 @@
 #define ZIPLIST_BYTES(zl)       (*((uint32_t*)(zl)))
 // 定位到 ziplist 的 offset 属性，该属性记录了到达表尾节点的偏移量
 // 用于取出 offset 属性的现有值，或者为 offset 属性赋予新值
+// zl 指针 + 4bytes强行转换为 uint32_t*指针变量, 并取出该指针指向的值
 #define ZIPLIST_TAIL_OFFSET(zl) (*((uint32_t*)((zl)+sizeof(uint32_t))))
 // 定位到 ziplist 的 length 属性，该属性记录了 ziplist 包含的节点数量
 // 用于取出 length 属性的现有值，或者为 length 属性赋予新值
@@ -380,7 +381,7 @@ static unsigned int zipEncodeLength(unsigned char *p, unsigned char encoding, un
         /* Although encoding is given it may not be set for strings,
          * so we determine it here using the raw length. */
         if (rawlen <= 0x3f) {
-            if (!p) return len;
+            if (!p) return len;  // 空
             buf[0] = ZIP_STR_06B | rawlen;
         } else if (rawlen <= 0x3fff) {
             len += 1;
